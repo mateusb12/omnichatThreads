@@ -1,11 +1,16 @@
-import java.util.Collections;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 public class ConversationTest {
-    public static void main(String[] args) {
-        final String SELECTED_URL = "http://localhost:3000/twilioSandbox";
-        final int COLUMN_WIDTH = 70;
+    final static int COLUMN_WIDTH = 70;
 
-        ConversationStage[] conversationStages = new ConversationStage[] {
+    public static void main(String[] args) {
+        final String SELECTED_URL = "http://localhost:8080/twilioSandbox";
+
+        String csvFile = "conversation_log.csv";
+        String lineSeparator = System.getProperty("line.separator");
+
+        ConversationStage[] conversationStages = new ConversationStage[]{
                 new ConversationStage("_hello", "Oii", "Parece que você não está cadastrado no nosso sistema, e vou precisar fazer o seu cadastro. Por favor, me informe o seu nome."),
                 new ConversationStage("_name", "Clark Kent", "Qual o seu endereço?"),
                 new ConversationStage("_address", "Avenida da Paz 2845", "Qual o seu CPF?"),
@@ -17,31 +22,49 @@ public class ConversationTest {
                 new ConversationStage("_paymentChoice", "Pix", "Tudo certo então! O pedido estará indo para a sua casa em breve!")
         };
 
-        System.out.printf("%-15s %-" + COLUMN_WIDTH + "s %-" + COLUMN_WIDTH + "s %-" + COLUMN_WIDTH + "s %-10s%n",
-                "STAGE", "INPUT", "EXPECTED OUTPUT", "ACTUAL OUTPUT", "TEST RESULT");
-        System.out.println(String.join("", Collections.nCopies(175, "-")));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvFile))) {
+            // Cabeçalhos do CSV
+            bw.write(String.join(",", "STAGE", "INPUT", "EXPECTED OUTPUT", "ACTUAL OUTPUT", "TEST RESULT"));
+            bw.write(lineSeparator);
 
-        for (ConversationStage stage : conversationStages) {
-            try {
-                String output = BackendHttpRequest.getBotResponseFromFlask(stage.getInput(), SELECTED_URL);
-                String resultEmoji = output.equals(stage.getExpectedOutput()) ? "✅" : "❌";
-                String truncatedInput = truncateString(stage.getInput(), COLUMN_WIDTH);
-                String truncatedExpected = truncateString(stage.getExpectedOutput(), COLUMN_WIDTH);
-                String truncatedOutput = truncateString(output, COLUMN_WIDTH);
-                System.out.printf("%-15s %-" + COLUMN_WIDTH + "s %-" + COLUMN_WIDTH + "s %-" + COLUMN_WIDTH + "s %-10s%n",
-                        stage.getStage(), truncatedInput, truncatedExpected, truncatedOutput, resultEmoji);
-            } catch (Exception e) {
-                System.err.println("Error at stage " + stage.getStage());
-                e.printStackTrace();
+            for (ConversationStage stage : conversationStages) {
+                try {
+                    String output = BackendHttpRequest.getBotResponseFromFlask(stage.getInput(), SELECTED_URL);
+                    String resultEmoji = output.equals(stage.getExpectedOutput()) ? "✅" : "❌";
+                    String truncatedInput = truncateString(stage.getInput());
+                    String truncatedExpected = truncateString(stage.getExpectedOutput());
+                    String truncatedOutput = truncateString(output);
+
+                    // Escrevendo no CSV
+                    bw.write(String.join(",",
+                            stage.getStage(),
+                            "\"" + truncatedInput + "\"",
+                            "\"" + truncatedExpected + "\"",
+                            "\"" + truncatedOutput + "\"",
+                            resultEmoji
+                    ));
+                    bw.write(lineSeparator);
+
+                } catch (Exception e) {
+                    System.err.println("Error at stage " + stage.getStage());
+                    e.printStackTrace();
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private static String truncateString(String str, int width) {
-        if (str.length() <= width) {
+    private static String truncateString(String str) {
+        if (str.length() <= COLUMN_WIDTH) {
             return str;
         } else {
-            return str.substring(0, width - 3) + "..."; // Truncate and add ellipsis
+            // Encontrar o último espaço antes do limite para evitar quebrar palavras
+            int lastSpaceIndex = str.lastIndexOf(' ', COLUMN_WIDTH - 1);
+            if (lastSpaceIndex == -1) {
+                lastSpaceIndex = COLUMN_WIDTH - 1; // Se não houver espaço, quebre no limite
+            }
+            return str.substring(0, lastSpaceIndex) + "\n" + str.substring(lastSpaceIndex).trim();
         }
     }
 }

@@ -10,8 +10,8 @@ public class BackendHttpRequest {
 
     public static void main(String[] args) {
         try {
-            String inputCellValue = "Oiii";
-            String selectedUrl = "http://localhost:3000/twilioSandbox";
+            String inputCellValue = "linguiça com requeijão";
+            String selectedUrl = "http://localhost:8080/twilioSandbox";
 
             String response = getBotResponseFromFlask(inputCellValue, selectedUrl);
             System.out.println("Received response from server: " + response);
@@ -31,8 +31,7 @@ public class BackendHttpRequest {
         connection.setRequestProperty("From",
                 java.net.URLEncoder.encode("whatsapp:+558599171902", StandardCharsets.UTF_8));
         connection.setRequestProperty("WaId", "558599171902");
-        connection.setRequestProperty("Body",
-                java.net.URLEncoder.encode(messageContent, StandardCharsets.UTF_8));
+        connection.setRequestProperty("Body",messageContent);
         connection.setDoOutput(true);
 
         try (OutputStream os = connection.getOutputStream()) {
