@@ -4,6 +4,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
 
 public class BackendHttpRequest {
@@ -12,15 +15,16 @@ public class BackendHttpRequest {
         try {
             String inputCellValue = "linguiça com requeijão";
             String selectedUrl = "http://localhost:8080/twilioSandbox";
-
-            String response = getBotResponseFromFlask(inputCellValue, selectedUrl);
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("CustomIp", utils.generateRandomIp());
+            String response = getBotResponseFromFlask(inputCellValue, selectedUrl, headers);
             System.out.println("Received response from server: " + response);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static String getBotResponseFromFlask(String messageContent, String desiredUrl) throws Exception {
+    public static String getBotResponseFromFlask(String messageContent, String desiredUrl, HashMap<String, String> headers ) throws Exception {
         URL url = new URL(desiredUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -33,6 +37,10 @@ public class BackendHttpRequest {
         connection.setRequestProperty("WaId", "558599171902");
         connection.setRequestProperty("Body",messageContent);
         connection.setDoOutput(true);
+
+        for (Map.Entry<String, String> header : headers.entrySet()) {
+            connection.setRequestProperty(header.getKey(), header.getValue());
+        }
 
         try (OutputStream os = connection.getOutputStream()) {
             byte[] input = messageContent.getBytes(StandardCharsets.UTF_8);

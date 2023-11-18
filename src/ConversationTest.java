@@ -1,11 +1,16 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.util.HashMap;
 import java.io.IOException;
 public class ConversationTest {
-    final static int COLUMN_WIDTH = 70;
+
 
     public static void main(String[] args) {
         final String SELECTED_URL = "http://localhost:8080/twilioSandbox";
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("CustomIp", utils.generateRandomIp());
+
 
         String csvFile = "conversation_log.csv";
         String lineSeparator = System.getProperty("line.separator");
@@ -29,11 +34,11 @@ public class ConversationTest {
 
             for (ConversationStage stage : conversationStages) {
                 try {
-                    String output = BackendHttpRequest.getBotResponseFromFlask(stage.getInput(), SELECTED_URL);
+                    String output = BackendHttpRequest.getBotResponseFromFlask(stage.getInput(), SELECTED_URL,headers);
                     String resultEmoji = output.equals(stage.getExpectedOutput()) ? "✅" : "❌";
-                    String truncatedInput = truncateString(stage.getInput());
-                    String truncatedExpected = truncateString(stage.getExpectedOutput());
-                    String truncatedOutput = truncateString(output);
+                    String truncatedInput = utils.truncateString(stage.getInput());
+                    String truncatedExpected = utils.truncateString(stage.getExpectedOutput());
+                    String truncatedOutput = utils.truncateString(output);
 
                     // Escrevendo no CSV
                     bw.write(String.join(",",
@@ -55,16 +60,5 @@ public class ConversationTest {
         }
     }
 
-    private static String truncateString(String str) {
-        if (str.length() <= COLUMN_WIDTH) {
-            return str;
-        } else {
-            // Encontrar o último espaço antes do limite para evitar quebrar palavras
-            int lastSpaceIndex = str.lastIndexOf(' ', COLUMN_WIDTH - 1);
-            if (lastSpaceIndex == -1) {
-                lastSpaceIndex = COLUMN_WIDTH - 1; // Se não houver espaço, quebre no limite
-            }
-            return str.substring(0, lastSpaceIndex) + "\n" + str.substring(lastSpaceIndex).trim();
-        }
-    }
+
 }
