@@ -2,8 +2,8 @@ STAGE,INPUT,EXPECTED OUTPUT,ACTUAL OUTPUT,TEST RESULT
 _hello,"Oii","Parece que você não está cadastrado no nosso sistema, e vou precisar
 fazer o seu cadastro. Por favor, me informe o seu nome.","Não foi possível se conectar ao fulfillment do dialogflow. Por favor,
 ligue a API",❌
-_name,"Clark Kent","Qual o seu endereço?","Infelizmente, não captei o que deseja.",❌
-_address,"Avenida da Paz 2845","Qual o seu CPF?","Lamento, mas não compreendi.",❌
+_name,"Clark Kent","Qual o seu endereço?","Lamento, mas não compreendi.",❌
+_address,"Avenida do Solitario 2845","Qual o seu CPF?","Desculpe, mas não compreendi.",❌
 _cpf,"12345678910","Usuário cadastrado com sucesso!, digite 'ok' para continuar","Infelizmente, não captei o que deseja.",❌
 _welcome,"ok","Olá! Bem-vindo à Pizza do Bill! Funcionamos das 17h às 22h.
  Cardápio
@@ -25,4 +25,4 @@ de laranja - R$6.50","What is the quantity?",❌
 _drinkChoice,"Vou querer um guaraná e dois sucos de laranja","Vai ser: - 1 x Pizza meio calabresa meio margherita (R$16.50) - 1 x
 Pizza de frango (R$18.90) - 1 x Guaraná (R$4.99) - 2 x Suco de laranja (R$13.00) - Total → [R$53.39] Qual vai ser a forma de pagamento? (pix/cartão/dinheiro)","Não foi possível se conectar ao fulfillment do dialogflow. Por favor,
 ligue a API",❌
-_paymentChoice,"Pix","Tudo certo então! O pedido estará indo para a sua casa em breve!","Desculpe, mas não compreendi.",❌
+_paymentChoice,"Pix","Tudo certo então! O pedido estará indo para a sua casa em breve!","Infelizmente, não captei o que deseja.",❌

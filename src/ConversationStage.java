@@ -1,7 +1,7 @@
 public class ConversationStage {
-    private String stage;
-    private String input;
-    private String expectedOutput;
+    private final String stage;
+    private final String input;
+    private final String expectedOutput;
 
     public ConversationStage(String stage, String input, String expectedOutput) {
         this.stage = stage;
