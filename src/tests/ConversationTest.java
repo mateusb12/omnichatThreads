@@ -1,11 +1,20 @@
+package tests;
+
+import classes.ConversationStage;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.HashMap;
 import java.io.IOException;
+
+import classes.HttpConnectionProperties;
+import common.utils;
+import mocks.ReqPropertiesMocks;
+
 public class ConversationTest {
     static String SELECTED_URL = "http://localhost:8080/final_test";
     static String lineSeparator = System.getProperty("line.separator");
-public static void RunConversationFlow(ConversationStage[] conversationFlow, HashMap<String, String> headers, String csvFileName) {
+public static void RunConversationFlow(ConversationStage[] conversationFlow, HashMap<String, String> headers, String csvFileName, HttpConnectionProperties reqProperties) {
 
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(csvFileName + ".csv"))) {
         // Cabeçalhos do CSV
@@ -14,7 +23,7 @@ public static void RunConversationFlow(ConversationStage[] conversationFlow, Has
 
         for (ConversationStage stage : conversationFlow) {
             try {
-                String output = BackendHttpRequest.getBotResponseFromFlask(stage.getInput(), SELECTED_URL, headers);
+                String output = BackendHttpRequest.getBotResponseFromFlask(stage.getInput(), SELECTED_URL, headers, reqProperties);
                 String resultEmoji = output.equals(stage.getExpectedOutput()) ? "✅" : "❌";
                 String truncatedInput = utils.truncateString(stage.getInput());
                 String truncatedExpected = utils.truncateString(stage.getExpectedOutput());
@@ -42,8 +51,7 @@ public static void RunConversationFlow(ConversationStage[] conversationFlow, Has
     public static void main(String[] args) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("CustomIp", utils.generateRandomIp());
-
-
+        HttpConnectionProperties properties = ReqPropertiesMocks.reqProperties1;
         String csvFile = "conversation_log";
 
 
@@ -59,7 +67,7 @@ public static void RunConversationFlow(ConversationStage[] conversationFlow, Has
                 new ConversationStage("_paymentChoice", "Pix", "Tudo certo então! O pedido estará indo para a sua casa em breve!")
         };
 
-        RunConversationFlow(conversationStages,headers,csvFile);
+        RunConversationFlow(conversationStages,headers,csvFile, properties);
     }
 
 

@@ -1,3 +1,5 @@
+package tests;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -6,37 +8,34 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-
+import classes.HttpConnectionProperties;
+import common.utils;
+import mocks.ReqPropertiesMocks;
 import org.json.JSONObject;
 
 public class BackendHttpRequest {
 
     public static void main(String[] args) {
         try {
+
             String inputCellValue = "linguiça com requeijão";
             String selectedUrl = "http://localhost:8080/twilioSandbox";
             HashMap<String, String> headers = new HashMap<>();
             headers.put("CustomIp", utils.generateRandomIp());
-            String response = getBotResponseFromFlask(inputCellValue, selectedUrl, headers);
+            HttpConnectionProperties properties = ReqPropertiesMocks.reqProperties1;
+            String response = getBotResponseFromFlask(inputCellValue, selectedUrl, headers, properties);
             System.out.println("Received response from server: " + response);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static String getBotResponseFromFlask(String messageContent, String desiredUrl, HashMap<String, String> headers ) throws Exception {
+    public static String getBotResponseFromFlask(String messageContent, String desiredUrl, HashMap<String, String> headers, HttpConnectionProperties reqProperties ) throws Exception {
         URL url = new URL(desiredUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        reqProperties.setBody(messageContent);
+        reqProperties.applyProperties(connection);
 
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-        connection.setRequestProperty("ProfileName",
-                java.net.URLEncoder.encode("Mateus", StandardCharsets.UTF_8));
-        connection.setRequestProperty("From",
-                java.net.URLEncoder.encode("whatsapp:+558599171902", StandardCharsets.UTF_8));
-        connection.setRequestProperty("WaId", "558599171902");
-        connection.setRequestProperty("Body",messageContent);
-        connection.setDoOutput(true);
 
         for (Map.Entry<String, String> header : headers.entrySet()) {
             connection.setRequestProperty(header.getKey(), header.getValue());

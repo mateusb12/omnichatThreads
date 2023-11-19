@@ -1,4 +1,9 @@
+package tests;
 
+import common.utils;
+import mocks.ConversationFlow;
+
+import mocks.ReqPropertiesMocks;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -8,7 +13,6 @@ public class MultiThreadConversationTest {
 
     public static void main(String[] args) {
         String csvFileName = "conversation_log";
-        final ConversationFlow flows = new ConversationFlow();
         HashMap<String, String> headers1 = new HashMap<>();
         headers1.put("CustomIp", utils.generateRandomIp());
 
@@ -25,9 +29,9 @@ public class MultiThreadConversationTest {
             ExecutorService executor = Executors.newFixedThreadPool(3);
 
             // Executar cada fluxo de conversa em uma thread separada
-            executor.submit(() -> ConversationTest.RunConversationFlow(flows.conversationFlow1, headers1, csvFileName + "1"));
-            executor.submit(() -> ConversationTest.RunConversationFlow(flows.conversationFlow2, headers2, csvFileName + "2"));
-            executor.submit(() -> ConversationTest.RunConversationFlow(flows.conversationFlow3, headers3, csvFileName + "3"));
+            executor.submit(() -> ConversationTest.RunConversationFlow(ConversationFlow.conversationFlow1, headers1, csvFileName + "1", ReqPropertiesMocks.reqProperties1));
+            executor.submit(() -> ConversationTest.RunConversationFlow(ConversationFlow.conversationFlow2, headers2, csvFileName + "2", ReqPropertiesMocks.reqProperties2));
+            executor.submit(() -> ConversationTest.RunConversationFlow(ConversationFlow.conversationFlow3, headers3, csvFileName + "3", ReqPropertiesMocks.reqProperties3));
 
             // Fechar o ExecutorService
             executor.shutdown();

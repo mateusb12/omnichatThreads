@@ -1,8 +1,10 @@
+package common;
+
 import java.util.Random;
 
 public class utils {
     final static int COLUMN_WIDTH = 70;
-    static String truncateString(String str) {
+    public static String truncateString(String str) {
         if (str.length() <= COLUMN_WIDTH) {
             return str;
         } else {

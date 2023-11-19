@@ -1,3 +1,5 @@
+package classes;
+
 public class ConversationStage {
     private final String stage;
     private final String input;

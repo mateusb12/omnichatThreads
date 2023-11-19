@@ -1,5 +1,9 @@
+package mocks;
+
+import classes.ConversationStage;
+
 public class ConversationFlow {
-    public ConversationStage[] conversationFlow1 = new ConversationStage[]{
+    public static ConversationStage[] conversationFlow1 = new ConversationStage[]{
             new ConversationStage("_hello", "Oii", "Parece que você não está cadastrado no nosso sistema, e vou precisar fazer o seu cadastro. Por favor, me informe o seu nome."),
             new ConversationStage("_name", "Clark Kent", "Qual o seu endereço?"),
             new ConversationStage("_address", "Avenida do Solitario 2845", "Qual o seu CPF?"),
@@ -10,7 +14,7 @@ public class ConversationFlow {
             new ConversationStage("_drinkChoice", "Vou querer um guaraná e dois sucos de laranja", "Vai ser: - 1 x Pizza meio calabresa meio margherita (R$16.50) - 1 x Pizza de frango (R$18.90) - 1 x Guaraná (R$4.99) - 2 x Suco de laranja (R$13.00) - Total → [R$53.39] Qual vai ser a forma de pagamento? (pix/cartão/dinheiro)"),
             new ConversationStage("_paymentChoice", "Pix", "Tudo certo então! O pedido estará indo para a sua casa em breve!")
     };
-    public ConversationStage[] conversationFlow2 = new ConversationStage[]{
+    public static ConversationStage[] conversationFlow2 = new ConversationStage[]{
             new ConversationStage("_hello", "Oii", "Parece que você não está cadastrado no nosso sistema, e vou precisar fazer o seu cadastro. Por favor, me informe o seu nome."),
             new ConversationStage("_name", "Bruce Wayne", "Qual o seu endereço?"),
             new ConversationStage("_address", "Alameda dos órfãos 1283", "Qual o seu CPF?"),
@@ -21,7 +25,7 @@ public class ConversationFlow {
             new ConversationStage("_drinkChoice", "Vou querer um guaraná e dois sucos de laranja", "Vai ser: - 1 x Pizza meio calabresa meio margherita (R$16.50) - 1 x Pizza de frango (R$18.90) - 1 x Guaraná (R$4.99) - 2 x Suco de laranja (R$13.00) - Total → [R$53.39] Qual vai ser a forma de pagamento? (pix/cartão/dinheiro)"),
             new ConversationStage("_paymentChoice", "Pix", "Tudo certo então! O pedido estará indo para a sua casa em breve!")
     };
-    public ConversationStage[] conversationFlow3 = new ConversationStage[]{
+    public static ConversationStage[] conversationFlow3 = new ConversationStage[]{
             new ConversationStage("_hello", "Oii", "Parece que você não está cadastrado no nosso sistema, e vou precisar fazer o seu cadastro. Por favor, me informe o seu nome."),
             new ConversationStage("_name", "Barry Allen", "Qual o seu endereço?"),
             new ConversationStage("_address", "Rua dos Precoce 2323", "Qual o seu CPF?"),
